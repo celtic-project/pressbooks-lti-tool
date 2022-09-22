@@ -2,7 +2,7 @@
 /*
   Plugin Name: Pressbooks LTI Tool
   Description: This plugin allows Pressbooks to be integrated with on-line courses using the 1EdTech Learning Tools Interoperability (LTI) specification.
-  Version: 1.0.1
+  Version: 1.0.2
   Author: Stephen P Vickers
  */
 

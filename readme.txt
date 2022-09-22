@@ -2,9 +2,9 @@
 Contributors: spvickers
 Tags: lti, ims, learning tools interoperability, celtic, tool, pressbooks
 Requires at least: 5.0
-Tested up to: 6.0
+Tested up to: 6.0.2
 Requires PHP: 5.6
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GNU General Public License Version 3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -16,7 +16,7 @@ The LTI specifications from [1EdTech](https://www.imsglobal.org/activity/learnin
 This plugin was developed with the financial support of [Delivros Orell Füssli, Switzerland](https://delivros-orellfuessli.ch/).
 
 == Installation ==
-See https://github.com/celtic-project/pressbooks-lti-tool/wiki/Installation/
+See [installation](https://github.com/celtic-project/pressbooks-lti-tool/wiki/Installation/).
 
 == Changelog ==
-See https://github.com/celtic-project/pressbooks-lti-tool/wiki/Version-history
+See [version history](https://github.com/celtic-project/pressbooks-lti-tool/wiki/Version-history).
