@@ -93,7 +93,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') &&
         'form' => array('action' => true, 'method' => true), 'p' => array(),
         'span' => array('href' => true, 'class' => true),
         'ul' => array('id' => true, 'class' => true), 'li' => array('class' => true),
-        'a' => array('href' => true, 'onclick' => true),
+        'a' => array('href' => true, 'class' => array(), 'onclick' => true),
         'input' => array('id' => true, 'type' => true, 'name' => true, 'value' => true, 'class' => true),
         'label' => array('for' => true));
 
@@ -189,6 +189,12 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') &&
     '    ul.tree > li li:last-child:after {' . "\n" .
     '      height: 8px;' . "\n" .
     '    }' . "\n" .
+    '    a.book {' . "\n" .
+    '      font-weight: bold;' . "\n" .
+    '    }' . "\n" .
+    '    li.chapter {' . "\n" .
+    '      font-style: italic;' . "\n" .
+    '    }' . "\n" .
     '    span {' . "\n" .
     '      cursor: pointer;' . "\n" .
     '      display: none;' . "\n" .
@@ -272,22 +278,31 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') &&
         }
         foreach ($books as $id => $book_structure) {
             $html .= '    <ul class="tree">' . "\n" .
-                '      <li ' . $open . '><a href="#" onclick="return false;">' . $titles[$id] . '</a>' . $span . "\n" .
+                '      <li' . $open . '"><a class="book" href="#" onclick="return false;">' . $titles[$id] . '</a>' . $span . "\n" .
                 '        <ul>' . "\n" .
                 '          <li><input id="item-' . $id . '-0" type="' . $type . '" name="section' . $suffix . '" value="' . $id . '.0-Cover Page"> <label for="item-' . $id . '-0">Cover Page</label></li>' . "\n";
-            foreach ($book_structure['front-matter'] as $k => $v) {
-                $title = str_replace('"', '&quot;', $v['post_title']);
-                $html .= '          <li><input id="item-' . $id . '-' . $v['ID'] . '" type="' . $type . '" name="section' . $suffix . '" value="' . $id . '.' . $v['ID'] . '-' . $title . '"> <label for="item-' . $id . '-' . $v['ID'] . '">' . $v['post_title'] . '</label></li>' . "\n";
-            }
-            foreach ($book_structure['part'] as $key => $value) {
-                foreach ($value['chapters'] as $k => $v) {
+            if (!empty($book_structure['front-matter'])) {
+                $html .= '            <li class="chapter">Front Matter</li>' . "\n";
+                foreach ($book_structure['front-matter'] as $k => $v) {
                     $title = str_replace('"', '&quot;', $v['post_title']);
-                    $html .= '          <li><input id="item-' . $id . '-' . $v['ID'] . '" type="' . $type . '" name="section' . $suffix . '" value="' . $id . '.' . $v['ID'] . '-' . $title . '"> <label for="item-' . $id . '-' . $v['ID'] . '">' . $v['post_title'] . '</label></li>' . "\n";
+                    $html .= '            <li><input id="item-' . $id . '-' . $v['ID'] . '" type="' . $type . '" name="section' . $suffix . '" value="' . $id . '.' . $v['ID'] . '-' . $title . '"> <label for="item-' . $id . '-' . $v['ID'] . '">' . $v['post_title'] . '</label></li>' . "\n";
                 }
             }
-            foreach ($book_structure['back-matter'] as $k => $v) {
-                $title = str_replace('"', '&quot;', $v['post_title']);
-                $html .= '          <li><input id="item-' . $id . '-' . $v['ID'] . '" type="' . $type . '" name="section' . $suffix . '" value="' . $id . '.' . $v['ID'] . '-' . $title . '"> <label for="item-' . $id . '-' . $v['ID'] . '">' . $v['post_title'] . '</label></li>' . "\n";
+            foreach ($book_structure['part'] as $key => $value) {
+                if (!empty($value['chapters'])) {
+                    $html .= '             <li class="chapter">' . $value['post_title'] . '</li>' . "\n";
+                    foreach ($value['chapters'] as $k => $v) {
+                        $title = str_replace('"', '&quot;', $v['post_title']);
+                        $html .= '              <li><input id="item-' . $id . '-' . $v['ID'] . '" type="' . $type . '" name="section' . $suffix . '" value="' . $id . '.' . $v['ID'] . '-' . $title . '"> <label for="item-' . $id . '-' . $v['ID'] . '">' . $v['post_title'] . '</label></li>' . "\n";
+                    }
+                }
+            }
+            if (!empty($book_structure['back-matter'])) {
+                $html .= '            <li class="chapter">Back Matter</li>' . "\n";
+                foreach ($book_structure['back-matter'] as $k => $v) {
+                    $title = str_replace('"', '&quot;', $v['post_title']);
+                    $html .= '              <li><input id="item-' . $id . '-' . $v['ID'] . '" type="' . $type . '" name="section' . $suffix . '" value="' . $id . '.' . $v['ID'] . '-' . $title . '"> <label for="item-' . $id . '-' . $v['ID'] . '">' . $v['post_title'] . '</label></li>' . "\n";
+                }
             }
             $html .= '        </ul>' . "\n" .
                 '      </li>' . "\n" .
