@@ -42,7 +42,7 @@ class Pressbooks_LTI_Tool extends LTI_Tool_WPTool
      *
      * @global type $lti_tool_session
      */
-    protected function onContentItem()
+    protected function onContentItem(): void
     {
         global $lti_tool_session;
 
@@ -72,7 +72,7 @@ class Pressbooks_LTI_Tool extends LTI_Tool_WPTool
      *
      * @global type $lti_tool_session
      */
-    protected function onLaunch()
+    protected function onLaunch(): void
     {
         global $lti_tool_session;
 

@@ -2,7 +2,7 @@
 /*
   Plugin Name: Pressbooks LTI Tool
   Description: This plugin allows Pressbooks to be integrated with on-line courses using the 1EdTech Learning Tools Interoperability (LTI) specification.
-  Version: 1.0.2
+  Version: 1.1.0
   Author: Stephen P Vickers
  */
 
@@ -18,6 +18,7 @@ use ceLTIc\LTI\LineItem;
 use ceLTIc\LTI\UserResult;
 use ceLTIc\LTI\Outcome;
 use ceLTIc\LTI\Tool;
+use ceLTIc\LTI\Enum\IdScope;
 use Pressbooks\Book;
 
 // Prevent loading this file directly
@@ -105,7 +106,12 @@ function pressbooks_lti_tool_hide_options($hide_options)
     $hide_options['uninstallblogs'] = '0';
     $hide_options['adduser'] = '1';
     $hide_options['mysites'] = '1';
-    $hide_options['scope'] = strval(Tool::ID_SCOPE_GLOBAL);
+    if (function_exists('lti_tool_use_lti_library_v5') && lti_tool_use_lti_library_v5()) {
+        $enum = IdScope::Platform;  // Avoids parse error in PHP < 8.1
+        $hide_options['scope'] = $enum->value;
+    } else {
+        $hide_options['scope'] = strval(Tool::ID_SCOPE_GLOBAL);
+    }
     $hide_options['saveemail'] = '0';
     $hide_options['homepage'] = '';
 
@@ -369,8 +375,14 @@ add_action('h5p_alter_user_result', 'pressbooks_lti_tool_h5p_result', 10, 4);
  */
 function pressbooks_lti_tool_id_scopes($scopes)
 {
+    if (function_exists('lti_tool_use_lti_library_v5') && lti_tool_use_lti_library_v5()) {
+        $enum = IdScope::Global;  // Avoids parse error in PHP < 8.1
+        $scope = $enum->value;
+    } else {
+        $scope = strval(Tool::ID_SCOPE_GLOBAL);
+    }
     $pressbooks_scopes = array();
-    $pressbooks_scopes[strval(Tool::ID_SCOPE_GLOBAL)] = $scopes[strval(Tool::ID_SCOPE_GLOBAL)];
+    $pressbooks_scopes[$scope] = $scopes[$scope];
 
     return $pressbooks_scopes;
 }

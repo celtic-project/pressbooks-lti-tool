@@ -10,6 +10,7 @@
  * Display a page of available books and sections and return the selection to the platform.
  */
 use ceLTIc\LTI;
+use ceLTIc\LTI\Enum\LtiVersion;
 use Pressbooks\Book;
 
 // Prevent loading this file directly
@@ -53,13 +54,19 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') &&
     LTI\Tool::$defaultTool->ltiVersion = LTI\Tool::$defaultTool->platform->ltiVersion;
     LTI\Tool::$defaultTool->signatureMethod = LTI\Tool::$defaultTool->platform->signatureMethod;
 
-    if ($lti_tool_session['lti_version'] !== LTI\Util::LTI_VERSION1P3) {
+    if (function_exists('lti_tool_use_lti_library_v5') && lti_tool_use_lti_library_v5()) {
+        $isv1p3 = ($lti_tool_session['lti_version'] === LtiVersion::V1P3);
+        $lti_version = $lti_tool_session['lti_version']->value;
+    } else {
+        $isv1p3 = ($lti_tool_session['lti_version'] === LTI\Util::LTI_VERSION1P3);
+        $lti_version = $lti_tool_session['lti_version'];
+    }
+    if (!$isv1p3) {
         $message_type = 'ContentItemSelection';
     } else {
         $message_type = 'LtiDeepLinkingResponse';
     }
-    $form_params = LTI\Tool::$defaultTool->signParameters($lti_tool_session['return_url'], $message_type,
-        $lti_tool_session['lti_version'], $form_params);
+    $form_params = LTI\Tool::$defaultTool->signParameters($lti_tool_session['return_url'], $message_type, $lti_version, $form_params);
     echo(LTI\Util::sendForm($lti_tool_session['return_url'], $form_params));
 } else {
     $available_books = explode(',', $platform->getSetting('__pressbooks_available_books'));
