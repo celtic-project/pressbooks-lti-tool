@@ -18,6 +18,7 @@ use ceLTIc\LTI\LineItem;
 use ceLTIc\LTI\UserResult;
 use ceLTIc\LTI\Outcome;
 use ceLTIc\LTI\Tool;
+use ceLTIc\LTI\Service;
 use ceLTIc\LTI\Enum\IdScope;
 use Pressbooks\Book;
 
@@ -411,20 +412,42 @@ function pressbooks_lti_tool_navigation()
 
 add_action('wp_head', 'pressbooks_lti_tool_navigation');
 
+/**
+ * Override Canvas XML configuration output.
+ *
+ * @param DOMDocument $dom
+ *
+ * @return DOMDocument
+ */
 function pressbooks_lti_tool_lti_configure_xml($dom)
 {
     $dom->getElementsByTagNameNS('http://www.imsglobal.org/xsd/imsbasiclti_v1p0', 'title')[0]->childNodes[0]->nodeValue = 'Pressbooks';
     $dom->getElementsByTagNameNS('http://www.imsglobal.org/xsd/imsbasiclti_v1p0', 'description')[0]->childNodes[0]->nodeValue = 'Access Pressbooks using LTI';
+    $dom->getElementsByTagNameNS('http://www.imsglobal.org/xsd/imsbasiclti_v1p0', 'icon')[0]->childNodes[0]->nodeValue = get_bloginfo('url') . '/?' . PRESSBOOKS_LTI_TOOL_PLUGIN_NAME . '&icon';
 
     return $dom;
 }
 
 add_filter('lti_tool_configure_xml', 'pressbooks_lti_tool_lti_configure_xml', 10, 1);
 
+/**
+ * Override Canvas JSON configuration output.
+ *
+ * @param object $configuration
+ *
+ * @return object
+ */
 function pressbooks_lti_tool_lti_configure_json($configuration)
 {
     $configuration->title = 'Pressbooks';
     $configuration->description = 'Access Pressbooks using LTI';
+    if (!isset($configuration->scopes[Service\LineItem::$SCOPE])) {
+        $configuration->scopes[] = Service\LineItem::$SCOPE;
+    }
+    if (!isset($configuration->scopes[Service\Score::$SCOPE])) {
+        $configuration->scopes[] = Service\Score::$SCOPE;
+    }
+    $configuration->extensions[0]->settings->icon_url = get_bloginfo('url') . '/?' . PRESSBOOKS_LTI_TOOL_PLUGIN_NAME . '&icon';
 
     return $configuration;
 }

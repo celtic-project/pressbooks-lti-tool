@@ -8,6 +8,7 @@
 
 use ceLTIc\LTI;
 use ceLTIc\LTI\Profile;
+use ceLTIc\LTI\Service;
 use Pressbooks\Book;
 
 require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lti-tool' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
@@ -31,10 +32,12 @@ class Pressbooks_LTI_Tool extends LTI_Tool_WPTool
         $this->resourceHandlers = array(new Profile\ResourceHandler(
                 new Profile\Item('pb', 'Pressbooks', 'Book content management.'), '?' . PRESSBOOKS_LTI_TOOL_PLUGIN_NAME . '&icon',
                 $requiredMessages, array()));
-        $this->requiredScopes = array(
-            LTI\Service\LineItem::$SCOPE,
-            LTI\Service\Score::$SCOPE
-        );
+        if (!isset($this->requiredScopes[Service\LineItem::$SCOPE])) {
+            $this->requiredScopes[] = Service\LineItem::$SCOPE;
+        }
+        if (!isset($this->requiredScopes[Service\Score::$SCOPE])) {
+            $this->requiredScopes[] = Service\Score::$SCOPE;
+        }
     }
 
     /**
