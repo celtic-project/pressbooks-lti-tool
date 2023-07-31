@@ -110,7 +110,7 @@ function pressbooks_lti_tool_hide_options($hide_options)
     if (function_exists('lti_tool_use_lti_library_v5') && lti_tool_use_lti_library_v5()) {
         $enum = IdScope::Platform;  // Avoids parse error in PHP < 8.1
         $hide_options['scope'] = $enum->value;
-    } else {
+    } else if (class_exists('ceLTIc\LTI\Tool')) {
         $hide_options['scope'] = strval(Tool::ID_SCOPE_GLOBAL);
     }
     $hide_options['saveemail'] = '0';
