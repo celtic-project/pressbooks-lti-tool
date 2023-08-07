@@ -2,7 +2,7 @@
 /*
   Plugin Name: Pressbooks LTI Tool
   Description: This plugin allows Pressbooks to be integrated with on-line courses using the 1EdTech Learning Tools Interoperability (LTI) specification.
-  Version: 1.1.0
+  Version: 1.1.1
   Author: Stephen P Vickers
  */
 
@@ -377,7 +377,7 @@ add_action('h5p_alter_user_result', 'pressbooks_lti_tool_h5p_result', 10, 4);
 function pressbooks_lti_tool_id_scopes($scopes)
 {
     if (function_exists('lti_tool_use_lti_library_v5') && lti_tool_use_lti_library_v5()) {
-        $enum = IdScope::Global;  // Avoids parse error in PHP < 8.1
+        $enum = IdScope::Platform;  // Avoids parse error in PHP < 8.1
         $scope = $enum->value;
     } else {
         $scope = strval(Tool::ID_SCOPE_GLOBAL);

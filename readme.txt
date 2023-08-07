@@ -4,7 +4,7 @@ Tags: lti, ims, 1edtech, learning tools interoperability, celtic, tool, pressboo
 Requires at least: 5.0
 Tested up to: 6.2.2
 Requires PHP: 7.0
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GNU General Public License Version 3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
