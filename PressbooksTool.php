@@ -107,6 +107,7 @@ class Pressbooks_LTI_Tool extends LTI_Tool_WPTool
             $user = $this->init_user($user_login);
         }
         if ($this->ok) {
+            $lti_tool_session['key'] = $this->resourceLink->getKey();
             $this->login_user($parts[0], $user, $user_login, $options);
             $post_id = intval($parts[1]);
             if (!empty($post_id)) {
