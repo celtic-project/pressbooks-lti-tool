@@ -60,7 +60,6 @@ class Pressbooks_LTI_Tool extends LTI_Tool_WPTool
         $lti_tool_session['is_content_item'] = true;
         $lti_tool_session['key'] = $this->platform->getKey();
         $lti_tool_session['lti_version'] = $this->platform->ltiVersion;
-        $lti_tool_session['return_url'] = $this->returnUrl;
         $lti_tool_session['accept_multiple'] = (!empty($this->messageParameters['accept_multiple']) && ($this->messageParameters['accept_multiple'] === 'true')) ? true : false;
 
         $lti_tool_session['data'] = (isset($this->messageParameters['data'])) ? $this->messageParameters['text'] : null;
