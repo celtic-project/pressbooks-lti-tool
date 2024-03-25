@@ -194,6 +194,7 @@ function pressbooks_lti_tool_config_platform($html, $platform)
     }
     asort($titles);
     $checked = checked(!empty($platform->getSetting('__pressbooks_hide_navigation')), true, false);
+    $selection_interface = $platform->getSetting('__pressbooks_selection_interface');
     $rule = $platform->getSetting('__pressbooks_grading_rule');
     $selected = function($value, $current) {
         if ($value === $current) {
@@ -228,6 +229,25 @@ function pressbooks_lti_tool_config_platform($html, $platform)
         '        </tr>' . "\n" .
         '        <tr>' . "\n" .
         '          <th scope="row">' . "\n" .
+        '            Interface for selecting content' . "\n" .
+        '          </th>' . "\n" .
+        '          <td>' . "\n" .
+        '            <fieldset>' . "\n" .
+        '              <legend class="screen-reader-text">' . "\n" .
+        '                <span>Interface for selecting content</span>' . "\n" .
+        '              </legend>' . "\n" .
+        '              <label for="lti_tool_pressbooks_selection_interface">' . "\n" .
+        '                <select name="lti_tool_pressbooks_selection_interface" id="lti_tool_pressbooks_selection_interface">' . "\n" .
+        '                  <option value=""' . $selected('', $selection_interface) . '>Tree structure</option>' . "\n" .
+        '                  <option value="table"' . $selected('table', $selection_interface) . '>Filtered table</option>' . "\n" .
+        '                </select>' . "\n" .
+        '                 Select how available content is displayed for selection' . "\n" .
+        '              </label>' . "\n" .
+        '            </fieldset>' . "\n" .
+        '          </td>' . "\n" .
+        '        </tr>' . "\n";
+    '        <tr>' . "\n" .
+        '          <th scope="row">' . "\n" .
         '            Hide Pressbooks navigation?' . "\n" .
         '          </th>' . "\n" .
         '          <td>' . "\n" .
@@ -236,7 +256,7 @@ function pressbooks_lti_tool_config_platform($html, $platform)
         '                <span>Hide Pressbooks navigation?</span>' . "\n" .
         '              </legend>' . "\n" .
         '              <label for="lti_tool_pressbooks_hide_navigation">' . "\n" .
-        '                <input name="lti_tool_pressbooks_hide_navigation" type="checkbox" id="lti_tool_pressbooks_hide_navigation" value="true"' . $checked . ' />' . "\n" .
+        '                <input name="lti_tool_pressbooks_hide_navigation" type="checkbox" id="lti_tool_pressbooks_hide_navigation" value="true"' . $checked . '>' . "\n" .
         '                   Check this box if you want to hide the Pressbooks navigation elements and only display the book content' . "\n" .
         '              </label>' . "\n" .
         '            </fieldset>' . "\n" .
@@ -284,6 +304,15 @@ function pressbooks_lti_tool_save_platform($platform, $options, $data)
         $books = implode(',', $data['lti_tool_pressbooks_available_books']);
     }
     $platform->setSetting('__pressbooks_available_books', $books);
+
+    $selection_interface = null;
+    if (isset($data['lti_tool_pressbooks_selection_interface'])) {
+        $selection_interface = sanitize_text_field($data['lti_tool_pressbooks_selection_interface']);
+        if (empty($selection_interface)) {
+            $selection_interface = null;
+        }
+    }
+    $platform->setSetting('__pressbooks_selection_interface', $selection_interface);
 
     $hide = null;
     if (isset($data['lti_tool_pressbooks_hide_navigation'])) {
