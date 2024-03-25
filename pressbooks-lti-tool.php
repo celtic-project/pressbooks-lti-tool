@@ -2,13 +2,13 @@
 /*
   Plugin Name: Pressbooks LTI Tool
   Description: This plugin allows Pressbooks to be integrated with on-line courses using the 1EdTech Learning Tools Interoperability (LTI) specification.
-  Version: 1.1.1
+  Version: 1.2.0
   Author: Stephen P Vickers
  */
 
 /*
  *  pressbooks-lti-tool - WordPress module to integrate LTI support with Pressbooks
- *  Copyright (C) 2023  Stephen P Vickers
+ *  Copyright (C) 2024  Stephen P Vickers
  *
  *  Author: stephen@spvsoftwareproducts.com
  */
