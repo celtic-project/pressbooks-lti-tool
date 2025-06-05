@@ -2,13 +2,13 @@
 /*
   Plugin Name: Pressbooks LTI Tool
   Description: This plugin allows Pressbooks to be integrated with on-line courses using the 1EdTech Learning Tools Interoperability (LTI) specification.
-  Version: 1.2.0
+  Version: 1.2.1
   Author: Stephen P Vickers
  */
 
 /*
  *  pressbooks-lti-tool - WordPress module to integrate LTI support with Pressbooks
- *  Copyright (C) 2024  Stephen P Vickers
+ *  Copyright (C) 2025  Stephen P Vickers
  *
  *  Author: stephen@spvsoftwareproducts.com
  */
@@ -353,8 +353,11 @@ function pressbooks_lti_tool_h5p_result(&$data, $result_id, $content_id, $user_i
 {
     global $lti_tool_session, $lti_tool_data_connector;
 
-    $context = Context::fromRecordId($lti_tool_session['contextpk'], $lti_tool_data_connector);
-    if ($context->hasLineItemService() && !empty($lti_tool_session['userpk'])) {
+    $context = null;
+    if (!empty($lti_tool_session['contextpk'])) {
+        $context = Context::fromRecordId($lti_tool_session['contextpk'], $lti_tool_data_connector);
+    }
+    if ($context && $context->hasLineItemService() && !empty($lti_tool_session['userpk'])) {
         $rule = $context->getPlatform()->getSetting('__pressbooks_grading_rule');
         if (($rule !== 'first') || empty($result_id)) {
             $plugin = H5P_Plugin::get_instance();
